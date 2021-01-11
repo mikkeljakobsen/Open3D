@@ -96,8 +96,8 @@ public:
     ///
     /// \param with_scaling Set to True to estimate scaling, False to force
     /// scaling to be 1.
-    TransformationEstimationPointToPoint(bool with_scaling = false)
-        : with_scaling_(with_scaling) {}
+    TransformationEstimationPointToPoint(bool with_constraint = false, bool with_scaling = false)
+        : with_constraint_(with_constraint), with_scaling_(with_scaling) {}
     ~TransformationEstimationPointToPoint() override {}
 
 public:
@@ -120,6 +120,7 @@ public:
     /// T = [ cR t]\n
     ///    [0   1]\n
     /// Sets 𝑐=1 if with_scaling is False.
+    bool with_constraint_ = false;
     bool with_scaling_ = false;
 
 private:
