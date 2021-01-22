@@ -194,11 +194,11 @@ void pybind_registration_classes(py::module &m) {
                    "distance.");
     py::detail::bind_copy_functions<
             registration::TransformationEstimationPointToPoint>(te_p2p);
-    te_p2p.def(py::init([](bool with_scaling) {
+    te_p2p.def(py::init([](bool with_constraint, bool with_scaling) {
                    return new registration::
                            TransformationEstimationPointToPoint(with_scaling);
                }),
-               "with_scaling"_a = false)
+               "with_scaling"_a = false, "with_constraint"_a = false)
             .def("__repr__",
                  [](const registration::TransformationEstimationPointToPoint
                             &te) {
@@ -375,7 +375,7 @@ must hold true for all edges.)");
     py::detail::bind_copy_functions<registration::FastGlobalRegistrationOption>(
             fgr_option);
     fgr_option
-            .def(py::init([](double division_factor, bool use_absolute_scale,
+            .def(py::init([](bool with_constraint, double division_factor, bool use_absolute_scale,
                              bool decrease_mu,
                              double maximum_correspondence_distance,
                              int iteration_number, double tuple_scale,
