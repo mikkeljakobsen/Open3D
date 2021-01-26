@@ -73,8 +73,6 @@ class TransformationEstimationPointToPoint : public TransformationEstimation {
 public:
     TransformationEstimationPointToPoint(bool with_constraint = false, bool with_scaling = false)
         : with_constraint_(with_constraint), with_scaling_(with_scaling) {}
-    TransformationEstimationPointToPoint(bool with_scaling = false)
-        : with_scaling_(with_scaling) {}
     ~TransformationEstimationPointToPoint() override {}
 
 public:

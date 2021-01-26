@@ -385,7 +385,7 @@ must hold true for all edges.)");
                              maximum_correspondence_distance, iteration_number,
                              tuple_scale, maximum_tuple_count);
                  }),
-                 "division_factor"_a = 1.4, "use_absolute_scale"_a = false,
+                 "division_factor"_a = 1.4, "with_constraint"_a = false, "use_absolute_scale"_a = false,
                  "decrease_mu"_a = false,
                  "maximum_correspondence_distance"_a = 0.025,
                  "iteration_number"_a = 64, "tuple_scale"_a = 0.95,

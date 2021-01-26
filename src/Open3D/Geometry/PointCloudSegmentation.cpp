@@ -32,7 +32,7 @@
 #include <numeric>
 #include <random>
 #include <unordered_set>
-
+#include <iostream>
 #include "Open3D/Geometry/TriangleMesh.h"
 #include "Open3D/Utility/Console.h"
 
@@ -139,7 +139,6 @@ std::tuple<Eigen::Vector4d, std::vector<size_t>> PointCloud::SegmentPlane(
         const int num_iterations /* = 100 */) const {
     RANSACResult result;
     double error = 0;
-
     // Initialize the plane model ax + by + cz + d = 0.
     Eigen::Vector4d plane_model = Eigen::Vector4d(0, 0, 0, 0);
     // Initialize the best plane model.
@@ -186,8 +185,23 @@ std::tuple<Eigen::Vector4d, std::vector<size_t>> PointCloud::SegmentPlane(
         if (this_result.fitness_ > result.fitness_ ||
             (this_result.fitness_ == result.fitness_ &&
              this_result.inlier_rmse_ < result.inlier_rmse_)) {
-            result = this_result;
-            best_plane_model = plane_model;
+            if (std::abs(std::abs(plane_model[0]) - 0.0) > 0.05) {
+                std::cout << "plane model coeff 0 below threshold" << std::endl;
+                continue;
+            }
+            else if (std::abs(std::abs(plane_model[1]) - 0.0) > 0.05) {
+                std::cout << "plane model coeff 1 below threshold" << std::endl;
+                continue;
+            }
+            else if (std::abs(std::abs(plane_model[2]) - 1.0) > 0.05) {
+                std::cout << "plane model coeff 2 below threshold" << std::endl;
+                continue;
+            }
+            else {
+                std::cout << plane_model << std::endl;
+                result = this_result;
+                best_plane_model = plane_model;
+            }
         }
     }
 
@@ -204,8 +218,10 @@ std::tuple<Eigen::Vector4d, std::vector<size_t>> PointCloud::SegmentPlane(
     }
 
     // Improve best_plane_model using the final inliers.
-    best_plane_model = GetPlaneFromPoints(points_, inliers);
 
+    std::cout << "best plane model before final refinement: " << best_plane_model << std::endl;
+    best_plane_model = GetPlaneFromPoints(points_, inliers);
+    std::cout << "best plane model after final refinement: " << best_plane_model << std::endl;
     utility::LogDebug("RANSAC | Inliers: {:d}, Fitness: {:e}, RMSE: {:e}",
                       inliers.size(), result.fitness_, result.inlier_rmse_);
     return std::make_tuple(best_plane_model, inliers);
