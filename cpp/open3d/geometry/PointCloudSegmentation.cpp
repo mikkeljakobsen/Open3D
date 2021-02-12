@@ -189,8 +189,19 @@ std::tuple<Eigen::Vector4d, std::vector<size_t>> PointCloud::SegmentPlane(
         if (this_result.fitness_ > result.fitness_ ||
             (this_result.fitness_ == result.fitness_ &&
              this_result.inlier_rmse_ < result.inlier_rmse_)) {
-            result = this_result;
-            best_plane_model = plane_model;
+             if (std::abs(std::abs(plane_model[0]) - 0.0) > 0.05) {
+                continue;
+                }
+                else if (std::abs(std::abs(plane_model[1]) - 0.0) > 0.05) {
+                    continue;
+                }
+                else if (std::abs(std::abs(plane_model[2]) - 1.0) > 0.05) {
+                    continue;
+                }
+                else {
+                    result = this_result;
+                    best_plane_model = plane_model;
+                }
         }
     }
 
